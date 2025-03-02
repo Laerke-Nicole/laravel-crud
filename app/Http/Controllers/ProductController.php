@@ -60,7 +60,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('products.show', compact('product'));
     }
 
 
@@ -88,7 +88,7 @@ class ProductController extends Controller
         //
     }
 
-    
+
     /**
      * Remove the product based on the id from the db.
      *
