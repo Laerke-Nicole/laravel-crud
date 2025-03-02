@@ -14,8 +14,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products.create');
+        $products = Product::latest()->paginate(5);
+        return view('products.index', compact('products'))->with(request()->input('page'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -24,8 +26,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -35,8 +38,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate the user input
+        $request->validate([
+            'name' => 'required',
+            'detail' => 'required',
+        ]);
+
+        // create a new product in the db
+        Product:: create($request->all());
+
+        //  redirect the user and send a success message
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -49,6 +63,7 @@ class ProductController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -59,6 +74,7 @@ class ProductController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -72,8 +88,9 @@ class ProductController extends Controller
         //
     }
 
+    
     /**
-     * Remove the specified resource from storage.
+     * Remove the product based on the id from the db.
      *
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
